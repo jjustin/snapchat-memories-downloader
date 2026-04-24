@@ -324,7 +324,8 @@ def combine_video(base_path, overlay_path, output_path):
             'ffmpeg',
             '-i', base_path,           # Input video
             '-i', overlay_path,        # Input overlay
-            '-filter_complex', '[0:v][1:v]overlay=0:0',  # Overlay at position 0,0
+            # Scale overlay to video and then put overlay in the middle of the video
+            '-filter_complex', '[1:v][0:v]scale=w=rw:h=rh[ol];[0:v][ol]overlay=(W-w)/2:(H-h)/2',
             '-c:a', 'copy',            # Copy audio without re-encoding
             '-y',                      # Overwrite output file
             output_path
